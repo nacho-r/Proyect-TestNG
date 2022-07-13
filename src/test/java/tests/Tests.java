@@ -1,31 +1,38 @@
 package tests;
 
-import data.factory.UserModelFactory;
-import models.UserModel;
 import org.testng.Assert;
-import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import pages.*;
+import utils.PropertiesFile;
 
 /**
  * Author: Bastian Silva
  */
-@Listeners(listeners.TestNGListeners.class)
+
 public class Tests extends BaseTest {
 
     @Test
-    public void transferenciaEntreCuentas() {
+    public void transferenciaEntreCuentas() throws Exception {
 
-        UserModel userModel = UserModelFactory.loginUser();
+        String email = PropertiesFile.readFile().getProperty("DEFAULT_EMAIL");
+        String pass = PropertiesFile.readFile().getProperty("DEFAULT_PASSWORD");
 
         HomePage homePage = new HomePage();
-        homePage.login(userModel.getEmail(), userModel.getPassword());
+        homePage.login(email, pass);
 
         MainMenuPage mainMenu = new MainMenuPage();
         String title = mainMenu.getTitle();
         Assert.assertEquals(title, "Hello John Smith");
 
         mainMenu.clickOptionMenu();
+
+        TransferFundsPage transferFunds = new TransferFundsPage();
+        transferFunds.transfer("800003", "4539082039396288", "100");
+        String count = transferFunds.validateAmmount();
+        Assert.assertTrue(count.contains("100"));
+        transferFunds.logOut();
+
+
     }
 
 

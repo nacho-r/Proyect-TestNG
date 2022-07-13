@@ -1,6 +1,8 @@
 package pages;
 
 import org.openqa.selenium.By;
+import java.time.Duration;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Class that represents the Home page of the application.
@@ -23,9 +25,16 @@ public class HomePage extends Base {
     /**
      * Method that allows to click on the Sign In button.
      */
-    public void login(String email, String password) {
+    public void login(String email, String password) throws Exception {
+        if (!isDisplayed(singInButton)){
+            throw new Exception("Elemento no Encontrado");
+        }
         type(email, emailInput);
+        sleep(1500);
         type(password, passwordInput);
+        sleep(1000);
         click(singInButton);
+        sleep(1000);
+
     }
 }

@@ -5,6 +5,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import utils.DriverFactory;
 
@@ -85,4 +86,20 @@ public abstract class Base {
         return findElement(locator, Duration.ofSeconds(10)).getText();
     }
 
+    public void selectElemByValue(By locator,String value){
+        WebElement selectElement = driver.findElement(locator);
+        Select selectObject = new Select(selectElement);
+        selectObject.selectByValue(value);
+    }
+    public Boolean isDisplayed(By locator) {
+        explicitWait(locator);
+        return driver.findElement(locator).isDisplayed();
+    }
+    public void explicitWait(By locator) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        wait.until(ExpectedConditions.elementToBeClickable(driver.findElement(locator)));
+    }
+    public void sleep(int millis) throws InterruptedException {
+        Thread.sleep(millis);
+    }
 }
